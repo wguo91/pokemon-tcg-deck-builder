@@ -1,0 +1,116 @@
+.modal-container {
+  font-family: gillSans;
+  letter-spacing: 0.5px;
+  background-color: rgba(0,0,0,0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  section#modal {
+    display: flex;
+    width: 70%;
+    margin: 15% auto;
+    border: $modal-border;
+    border-radius: 0.5em;
+    padding: 1em;
+    div#card-info #card-header {
+      width: 100%;
+      font-size: $card-title-size;
+      letter-spacing: 1px;
+      font-family: pokemonFont;
+      @include textBorder(#FFFFFF);
+    }
+    div#card-info #card-details {
+      padding: 0.5em;
+      background-color: rgba(255,255,255,0.4);
+      border-radius: 0.25em;
+      font-size: $basic-font-size;
+      p:first-child {
+        font-weight: bold;
+      }
+      .ability-details {
+        margin-top: 0.5em;
+        font-size: $attack-name-size;
+        font-weight: bolder;
+        h4.pokepower {
+          color: #A40000; // dark red
+          @include textBorder(#FFFFFF);
+        }
+        h4.pokebody {
+          color: #024B1E; // dark green
+          @include textBorder(#FFFFFF);
+        }
+        p {
+          font-size: $attack-text-size;
+        }
+      }
+      .all-attack-details {
+        .attack-details {
+          .attack-header {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5em;
+            figure {
+              padding: 0.25em 1em 0 0;
+              .energy-cost {
+                width: 20px;
+                height: 20px;
+              }
+            }
+            h4 {
+              font-size: $attack-name-size;
+              font-weight: bold;
+            }
+            h4:nth-of-type(2) {
+              margin-left: auto;
+            }
+          }
+          p {
+            font-size: $attack-text-size;
+          }
+        }
+      }
+      .other-details {
+        margin-top: 1em;
+        display: flex;
+        .retreat-cost {
+
+        }
+        .weakness {
+
+        }
+        .resistance {
+
+        }
+        section {
+          display: flex;
+          align-items: center;
+          margin-right: 0.25em;
+          p {
+            margin-right: 0.25em;
+          }
+          .weakness-resistance-figure {
+            display: flex;
+          }
+          figure {
+            padding: 0 0.25em 0 0.1em;
+            .energy-cost-other-details {
+              width: 20px;
+              height: 20px;
+              margin-right: 0.25em;
+            }
+          }
+        }
+        p {
+          text-transform: capitalize;
+        }
+      }
+
+    }
+    figure.card-image {
+      padding-right: 1em;
+    }
+  }
+}

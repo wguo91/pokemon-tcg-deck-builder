@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="small-scale web application for Pokemon TCG">
+    <meta name="author" content="Wilson Guo">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Pokemon TCG Deck Builder</title>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <header id="intro">
+      <h1>Pokemon TCG Deck Builder 1.0</h1>
+    </header>
+    <main>
+      <section id="intro-container">
+        <p id="introduction">
+          Welcome to the Pokemon TCG Deck Builder. Use the Search button to search for cards to add to your deck. Click the "Add" button in order to add your card to the Deck View portion of the webpage, located on the left side. Remove cards hovering over the card you wish to remove and click on the "Remove" button.
+        </p>
+      </section>
+      <section id="deck-container">
+        <section id="deck-view-container" class="column">
+          <div class="column-title">
+            <h1>Deck View</h1>
+            <p>Current Deck: <span id="deck-counter" data-counter="0">0</span> card(s)</p>
+          </div>
+          <section id="deck-view">
+          </section>
+        </section>
+        <section id="deck-builder" class="column">
+          <div class="column-title">
+            <h1>Deck Builder</h1>
+          </div>
+          <section id="form-container">
+            <form id="pokemon-form">
+              <label for="pokemon-input">Search for a Pokemon card</label>
+              <input type="text" id="pokemon-input" placeholder="Search for a Pokemon card">
+              <input type="submit" value="Search">
+            </form>
+            <section id="pokemon-list">
+            </section>
+          </section>
+        </section>
+      </section>
+    </main>
+    <!-- <div class="modal-container">
+      <section id="modal">
+        <div id="card-info">
+          <header>
+            <h1>Deoxys ex</h1>
+          </header>
+          <section id="card-details">
+
+          <p>Psychic</p>
+          </div>
+        </section>
+        <figure>
+          <img src="deoxys.png" alt="Deoxys">
+        </figure>
+      </section>
+    </div> -->
+    <footer>
+    </footer>
+  </body>
+</html>
