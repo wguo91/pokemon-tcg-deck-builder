@@ -1,5 +1,5 @@
 "use strict";
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", () => {
   const USER_KEY = "a297f552f5409f003fa4edb6fe0f8419";
   let baseUrl = "https://api.pokemontcg.io/v1/";
   let baseUrlCard = "https://api.pokemontcg.io/v1/cards/";
@@ -26,6 +26,9 @@ window.onload = function() {
       if (xhr.readyState === 4) {
         if (xhr.status >= 200 && xhr.status < 300) {
           constructCardList(JSON.parse(xhr.responseText).cards);
+          // remove the overlay
+          let loadOverlay = document.getElementById("load-overlay");
+          fadeOutElement(loadOverlay);
         } else {
           console.error("failure: " + xhr.responseText);
         }
@@ -33,6 +36,20 @@ window.onload = function() {
     });
     xhr.open("GET", baseUrlCard);
     xhr.send();
+  }
+
+  function fadeOutElement(target) {
+    let fadeEffect = setInterval(() => {
+      if (!target.style.opacity) {
+        target.style.opacity = 1;
+      }
+      if (target.style.opacity > 0) {
+        target.style.opacity -= 0.2;
+      } else {
+        clearInterval(fadeEffect);
+        target.style.display = "none";
+      }
+    }, 100);
   }
 
   // renders the card list based on the cards object
@@ -462,5 +479,4 @@ window.onload = function() {
     xhr.setRequestHeader("Accept", "application/json");
     xhr.send();
   });
-
-};
+});

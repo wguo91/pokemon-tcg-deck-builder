@@ -17,10 +17,8 @@
     padding: 1em;
     div#card-info #card-header {
       width: 100%;
+      font-weight: bold;
       font-size: $card-title-size;
-      letter-spacing: 1px;
-      font-family: pokemonFont;
-      @include textBorder(#FFFFFF);
     }
     div#card-info #card-details {
       padding: 0.5em;
