@@ -1,0 +1,22 @@
+{
+  "name": "pokemon-tcg-deck-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wguo91/pokemon-tcg-deck-builder.git"
+  },
+  "author": "Wilson Guo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wguo91/pokemon-tcg-deck-builder/issues"
+  },
+  "homepage": "https://github.com/wguo91/pokemon-tcg-deck-builder#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
