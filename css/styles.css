@@ -12,7 +12,7 @@
   src: url(../fonts/PTC55F.ttf);
 }
 * {
-  font-family: ptSans;
+  font-family: gillSans;
   margin: 0;
   padding: 0;
 }
@@ -204,7 +204,6 @@ section#pokemon-list ul li:last-child {
 }
 .modal-container section#modal div#card-info #card-header {
   width: 100%;
-  font-weight: bold;
   font-size: 24px;
 }
 .modal-container section#modal div#card-info #card-details {
@@ -230,7 +229,7 @@ section#pokemon-list ul li:last-child {
   text-shadow: -0.5px 0 #FFFFFF, 0 0.5px #FFFFFF, 0.5px 0 #FFFFFF, 0.5px -1px #FFFFFF;
 }
 .modal-container section#modal div#card-info #card-details .ability-details p {
-  font-size: 14px;
+  font-size: 18px;
 }
 .modal-container section#modal div#card-info #card-details .all-attack-details .attack-details .attack-header {
   display: flex;
@@ -252,7 +251,7 @@ section#pokemon-list ul li:last-child {
   margin-left: auto;
 }
 .modal-container section#modal div#card-info #card-details .all-attack-details .attack-details p {
-  font-size: 14px;
+  font-size: 18px;
 }
 .modal-container section#modal div#card-info #card-details .other-details {
   margin-top: 1em;
