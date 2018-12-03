@@ -1,4 +1,4 @@
-.modal-container {
+.modal-container { // for the overlay
   font-family: gillSans;
   letter-spacing: 0.5px;
   background-color: rgba(0,0,0,0.5);
@@ -7,20 +7,31 @@
   left: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  // center the modal dialog
+  align-items: center;
+  justify-content: center;
   z-index: 1;
   section#modal {
+    position: relative;
     display: flex;
-    width: 70%;
-    margin: 15% auto;
+    align-items: flex-start;
+    // flex-wrap: wrap;  for smaller sizes
+    width: 80%;
+    margin: 0 auto;
     border: $modal-border;
     border-radius: 0.5em;
     padding: 1em;
+    div#card-info {
+      flex: 1 1 auto;
+    }
     div#card-info #card-header {
-      width: 100%;
       font-size: $card-title-size;
     }
     div#card-info #card-details {
       padding: 0.5em;
+      flex: 1 1 auto;
+
       background-color: rgba(255,255,255,0.4);
       border-radius: 0.25em;
       font-size: $basic-font-size;
@@ -96,8 +107,10 @@
             .energy-cost-other-details {
               width: 20px;
               height: 20px;
-              margin-right: 0.25em;
             }
+          }
+          figcaption {
+            margin-left: 0.25em;
           }
         }
         p {
@@ -109,5 +122,13 @@
     figure.card-image {
       padding-right: 1em;
     }
+  }
+  #cancel-btn {
+    cursor: pointer;
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    width: 64px;
+    height: 64px;
   }
 }
