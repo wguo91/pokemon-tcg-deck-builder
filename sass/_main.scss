@@ -10,7 +10,9 @@
     main #intro-container {
       background-color: rgba(255,255,255,0.75);
       padding: 1em;
-
+      p {
+        font-size: $basic-font-size;
+      }
     }
   }
   #load-overlay {

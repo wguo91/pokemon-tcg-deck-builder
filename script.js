@@ -9,15 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return baseUrl + requestType + "/?name=" + searchTerm;
   };
 
-  // refreshes the card list e.g. after a search query
-  function refreshCardList(cards) {
-    let pokemonList = document.getElementById("pokemon-list");
-    while (pokemonList.lastChild) {
-      // using lastChild is more efficient
-      pokemonList.removeChild(pokemonList.lastChild);
-    }
-    constructCardList(cards);
-  };
 
   // loads the first 100 cards in the default list
   function loadDefaultListOfCards() {
@@ -36,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     xhr.open("GET", baseUrlCard);
     xhr.send();
-  }
+  };
 
   function fadeOutElement(target) {
     let fadeEffect = setInterval(() => {
@@ -50,140 +41,21 @@ document.addEventListener("DOMContentLoaded", () => {
         target.style.display = "none";
       }
     }, 100);
-  }
-
-  // renders the card list based on the cards object
-  function constructCardList(cards) {
-    // renders the default list of 100 items
-    let ul = document.createElement("ul");
-    cards.forEach(function(currentCard) {
-      // add the plus icon
-      let image = document.createElement("img");
-      image.src = "images/plus.png";
-      image.alt = "Add " + currentCard.name + " to current deck";
-      let figure = document.createElement("figure");
-      figure.appendChild(image);
-
-      let info = currentCard.name + " [" + currentCard.set + "]"
-      let para = document.createElement("p");
-      para.appendChild(document.createTextNode(info));
-
-      let li = document.createElement("li");
-      li.setAttribute("data-id", currentCard.id);
-      li.appendChild(para);
-      li.appendChild(figure);
-      ul.appendChild(li);
-    });
-
-    // use event delegation to avoid putting an event listener on every single list item // show more detailed information about a card
-    ul.addEventListener("click", function(event) {
-      // check if add button was clicked
-      // find the closest li ancestor if name is clicked
-      let id = event.target.closest("li").getAttribute("data-id");
-      fetchCardDataById(id)
-        .then(cardData => {
-          if (event.target.tagName === "IMG") {
-            addToDeckView(cardData);
-          } else {
-            loadModal(cardData);
-          }
-        })
-        .catch(error => console.error("FAILURE ON PROMISE error=" + error));
-    });
-    document.getElementById("pokemon-list").appendChild(ul);
   };
 
-  function addToDeckView(card) {
-    let cardImage = createCardImage(card.imageUrl, card.name);
-    cardImage.classList.add("deck-view-image");
-    // determine overlay color
-    let overlayColor = determineOverlayColor(card.types);
+  /**
+   * ORDER OF FUNCTIONS:
+   * fetchCardDataById
+   * refreshCardList
+   * constructCardList
+   * addToDeckView
+   * determineOverlayColor
+   */
 
-    // add an overlay
-    let cardOverlay = document.createElement("div");
-    cardOverlay.classList.add("card-overlay");
-    cardOverlay.style.backgroundColor = overlayColor + "66";
-
-    // overlay text
-    let cardOverlayDetails = document.createElement("p");
-    cardOverlayDetails.appendChild(document.createTextNode(card.name));
-    cardOverlayDetails.style.backgroundColor = overlayColor;
-
-    // add a removal button
-    let image = document.createElement("img");
-    image.src = "images/minus.png";
-    image.alt = "Remove " + card.name + " from current deck";
-    let figure = document.createElement("figure");
-    figure.id = "figure_" + new Date().getTime().toString();
-    let figCaption = document.createElement("figcaption");
-    figCaption.appendChild(document.createTextNode("Remove"));
-
-    // if non-Pokemon card, border and font should be black
-    if (card.supertype.startsWith("P")) {
-      cardOverlayDetails.style.color = "#FFFFFF";
-      cardOverlay.style.border = "1px solid " + overlayColor;
-      figCaption.style.color = "#FFFFFF";
-    } else {
-      cardOverlayDetails.style.color = "#000000";
-      cardOverlay.style.border = "1px solid " + "#000000";
-      figCaption.style.color = "#000000";
-    }
-    cardOverlay.appendChild(cardOverlayDetails);
-    figure.appendChild(image);
-    figure.appendChild(figCaption);
-    cardOverlay.appendChild(figure);
-
-    cardImage.appendChild(cardOverlay);
-    let deckView = document.getElementById("deck-view");
-    deckView.appendChild(cardImage);
-    // add event listener to remove cards from the deck view
-    deckView.addEventListener("click", (event) => {
-      if (event.target.tagName === "IMG") {
-        event.target.closest(".card-image").remove();
-      }
-    });
-
-    // update counter
-    let deckCounter = document.getElementById("deck-counter");
-    let count = parseInt(deckCounter.dataset.counter, 10) + 1;
-    deckCounter.dataset.counter = count.toString();
-    deckCounter.innerHTML = count.toString();
-  };
-
-  function determineOverlayColor(types) {
-    // if pokemon, choose color based on type, otherwise return default color (white)
-    if (types) {
-      let type = types[0].toLowerCase();
-      switch(type) {
-        case "colorless":
-          return "#AFA97A";
-        case "darkness":
-          return "#16325A";
-        case "dragon":
-          return "#C9AE26";
-        case "fairy":
-          return "#FF1697";
-        case "fighting":
-          return "#FF5B00";
-        case "fire":
-          return "#FF0200";
-        case "grass":
-          return "#5ECB1F";
-        case "lightning":
-          return "#FFED01";
-        case "metal":
-          return "#6F858D";
-        case "psychic":
-          return "#833B8B";
-        case "water":
-          return "#00A8EA";
-        default:
-          return "#FFFFFF";
-      }
-    }
-    return "#FFFFFF";
-  }
-  // makes an AJAX call to fetch a card
+  /**
+   * makes an AJAX call to fetch card data based on the card id
+   * @param card id
+   */
   function fetchCardDataById(id) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -200,6 +72,161 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+ /**
+  * refreshes the card list e.g. after a search query
+  * @param cards, the list of cards to display in #pokemon-list
+  */
+ function refreshCardList(cards) {
+   let pokemonList = document.getElementById("pokemon-list");
+   while (pokemonList.lastChild) {
+     // using lastChild is more efficient
+     pokemonList.removeChild(pokemonList.lastChild);
+   }
+   constructCardList(cards);
+ };
+
+ /**
+  * for each card in cards, we will render a DOM list element
+  * @param cards, the list of cards to convert into DOM elements
+  */
+ function constructCardList(cards) {
+   // renders the default list of 100 items
+   let ul = document.createElement("ul");
+   cards.forEach(function(card) {
+     // add the plus icon
+     let image = document.createElement("img");
+     image.src = "images/plus.png";
+     image.alt = "Add " + card.name + " to current deck";
+     let figure = document.createElement("figure");
+     figure.appendChild(image);
+
+     let info = card.name + " [" + card.set + "]"
+     let para = document.createElement("p");
+     para.appendChild(document.createTextNode(info));
+
+     let li = document.createElement("li");
+     li.id = card.id;
+     li.appendChild(para);
+     li.appendChild(figure);
+     ul.appendChild(li);
+   });
+
+   // EVENT DELEGATION
+   // display detailed information about a card when the user clicks on a list item
+   ul.addEventListener("click", (event) => {
+     // if the add button is clicked, we perform a different action
+     fetchCardDataById(event.target.closest("li").id)
+       .then(cardData => {
+         if (event.target.tagName === "IMG") {
+           addToDeckView(cardData);
+         } else {
+           loadModal(cardData);
+         }
+       })
+       .catch(error => console.error("Failure to fetch card data with error=" + error));
+   });
+   document.getElementById("pokemon-list").appendChild(ul);
+ };
+
+ /**
+  * render the specified card to the deck view as a DOM element
+  * @param card, the card to render into the view
+  */
+ function addToDeckView(card) {
+   let cardImage = createCardImage(card.imageUrl, card.name);
+   cardImage.classList.add("deck-view-image");
+   // determine overlay color
+   let overlayColor = determineOverlayColor(card.types);
+
+   // add an overlay
+   let cardOverlay = document.createElement("div");
+   cardOverlay.classList.add("card-overlay");
+   cardOverlay.style.backgroundColor = overlayColor + "66";
+
+   // overlay text
+   let cardOverlayDetails = document.createElement("p");
+   cardOverlayDetails.appendChild(document.createTextNode(card.name));
+   cardOverlayDetails.style.backgroundColor = overlayColor;
+
+   // add a removal button
+   let image = document.createElement("img");
+   image.src = "images/minus.png";
+   image.alt = "Remove " + card.name + " from current deck";
+   let figure = document.createElement("figure");
+   figure.id = "figure_" + new Date().getTime().toString();
+   let figCaption = document.createElement("figcaption");
+   figCaption.appendChild(document.createTextNode("Remove"));
+
+   // if non-Pokemon card, border and font should be black
+   if (card.supertype.startsWith("P")) {
+     cardOverlayDetails.style.color = "#FFFFFF";
+     cardOverlay.style.border = "1px solid " + overlayColor;
+     figCaption.style.color = "#FFFFFF";
+   } else {
+     cardOverlayDetails.style.color = "#000000";
+     cardOverlay.style.border = "1px solid " + "#000000";
+     figCaption.style.color = "#000000";
+   }
+   cardOverlay.appendChild(cardOverlayDetails);
+   figure.appendChild(image);
+   figure.appendChild(figCaption);
+   cardOverlay.appendChild(figure);
+
+   cardImage.appendChild(cardOverlay);
+   let deckView = document.getElementById("deck-view");
+   deckView.appendChild(cardImage);
+   // add event listener to remove cards from the deck view
+   deckView.addEventListener("click", (event) => {
+     if (event.target.tagName === "IMG") {
+       event.target.closest(".card-image").remove();
+     }
+   });
+
+   // update counter
+   let deckCounter = document.getElementById("deck-counter");
+   let count = parseInt(deckCounter.dataset.counter, 10) + 1;
+   deckCounter.dataset.counter = count.toString();
+   deckCounter.innerHTML = count.toString();
+ };
+
+ /**
+  * based on the Pokemon type, determine the overlay color, default color is white
+  * @param the types array
+  */
+ function determineOverlayColor(types) {
+   // if pokemon, choose color based on type, otherwise return default color (white)
+   if (types) {
+     let type = types[0].toLowerCase();
+     switch(type) {
+       case "colorless":
+         return "#AFA97A";
+       case "darkness":
+         return "#16325A";
+       case "dragon":
+         return "#C9AE26";
+       case "fairy":
+         return "#FF1697";
+       case "fighting":
+         return "#FF5B00";
+       case "fire":
+         return "#FF0200";
+       case "grass":
+         return "#5ECB1F";
+       case "lightning":
+         return "#FFED01";
+       case "metal":
+         return "#6F858D";
+       case "psychic":
+         return "#833B8B";
+       case "water":
+         return "#00A8EA";
+       default:
+         return "#FFFFFF";
+     }
+   }
+   return "#FFFFFF";
+ };
+
   // create HTML element for the card type
   function createCardTypeElement(typeName, typeValue) {
     let cardType = document.createElement("p");
@@ -207,7 +234,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return cardType;
   }
 
-  // load modal when a user clicks on a card
+  /**
+   * load the modal dialog for a certain card
+   * @param card, the card to construct the modal dialog for
+   */
   function loadModal(card) {
     let modalContainer = document.createElement("div");
     modalContainer.classList.add("modal-container");
@@ -290,15 +320,30 @@ document.addEventListener("DOMContentLoaded", () => {
       // card type
       cardDetails.append(createCardTypeElement("Energy", card.subtype));
     }
-
     cardInfo.appendChild(header);
     cardInfo.appendChild(cardDetails);
+
+    // create the "cancel" button for the modal dialog
+    let cancelImage = document.createElement("img");
+    cancelImage.src = "images/cancel.png";
+    cancelImage.alt = "Cancel button";
+    cancelImage.id = "cancel-btn";
+
+    // exit the modal on click
+    cancelImage.addEventListener("click", (event) => {
+      modalContainer.style.display = "none";
+    });
+
+    let cancelImageFigure = document.createElement("figure");
+    cancelImageFigure.appendChild(cancelImage);
+    modal.appendChild(cancelImageFigure);
 
     // place image first, then header, then details
     let cardImage = createCardImage(card.imageUrl, card.name);
     modal.appendChild(cardImage);
     modal.appendChild(cardInfo);
     modalContainer.appendChild(modal);
+
     document.body.appendChild(modalContainer);
   };
 
