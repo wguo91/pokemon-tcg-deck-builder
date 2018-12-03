@@ -5,4 +5,5 @@ Screenshot:
 
 TODO:
 - create mobile view
-- save state when page refreshe
+- save state when page refreshes
+- save deck functionality
