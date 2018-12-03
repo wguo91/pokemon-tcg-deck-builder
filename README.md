@@ -5,6 +5,4 @@ Screenshot:
 
 TODO:
 - create mobile view
-- save state when page refreshes
-- if search results return nothing, SAY SO
-- add exit button on modal
+- save state when page refreshe

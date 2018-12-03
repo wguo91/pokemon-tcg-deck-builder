@@ -90,42 +90,50 @@ document.addEventListener("DOMContentLoaded", () => {
   * @param cards, the list of cards to convert into DOM elements
   */
  function constructCardList(cards) {
-   // renders the default list of 100 items
-   let ul = document.createElement("ul");
-   cards.forEach(function(card) {
-     // add the plus icon
-     let image = document.createElement("img");
-     image.src = "images/plus.png";
-     image.alt = "Add " + card.name + " to current deck";
-     let figure = document.createElement("figure");
-     figure.appendChild(image);
+   if (cards.length !== 0) {
+     let ul = document.createElement("ul");
+     cards.forEach(function(card) {
+       // add the plus icon
+       let image = document.createElement("img");
+       image.src = "images/plus.png";
+       image.alt = "Add " + card.name + " to current deck";
+       let figure = document.createElement("figure");
+       figure.appendChild(image);
 
-     let info = card.name + " [" + card.set + "]"
-     let para = document.createElement("p");
-     para.appendChild(document.createTextNode(info));
+       let info = card.name + " [" + card.set + "]"
+       let para = document.createElement("p");
+       para.appendChild(document.createTextNode(info));
 
+       let li = document.createElement("li");
+       li.id = card.id;
+       li.appendChild(para);
+       li.appendChild(figure);
+       ul.appendChild(li);
+     });
+
+     // EVENT DELEGATION
+     // display detailed information about a card when the user clicks on a list item
+     ul.addEventListener("click", (event) => {
+       // if the add button is clicked, we perform a different action
+       let closestListItem = event.target.closest("#pokemon-list li");
+       fetchCardDataById(closestListItem.id)
+         .then(cardData => {
+           if (event.target.tagName === "IMG") {
+             addToDeckView(cardData);
+           } else {
+             loadModal(cardData);
+           }
+         })
+         .catch(error => console.error("Failure to fetch card data with error=" + error));
+     });
+     document.getElementById("pokemon-list").appendChild(ul);
+   } else {
+     let ul = document.createElement("ul");
      let li = document.createElement("li");
-     li.id = card.id;
-     li.appendChild(para);
-     li.appendChild(figure);
+     li.appendChild(document.createTextNode("No results found. Try a different search term?"));
      ul.appendChild(li);
-   });
-
-   // EVENT DELEGATION
-   // display detailed information about a card when the user clicks on a list item
-   ul.addEventListener("click", (event) => {
-     // if the add button is clicked, we perform a different action
-     fetchCardDataById(event.target.closest("li").id)
-       .then(cardData => {
-         if (event.target.tagName === "IMG") {
-           addToDeckView(cardData);
-         } else {
-           loadModal(cardData);
-         }
-       })
-       .catch(error => console.error("Failure to fetch card data with error=" + error));
-   });
-   document.getElementById("pokemon-list").appendChild(ul);
+     document.getElementById("pokemon-list").appendChild(ul);
+   }
  };
 
  /**
