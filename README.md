@@ -1,7 +1,7 @@
 # pokemon-tcg-deck-builder
 
 Screenshot:
-![Pokemon Deck Builder Screenshot](https://github.com/wguo91/pokemon-tcg-deck-builder/blob/master/images/screenshots/deckbuilder_screenshot.png)
+![Pokemon Deck Builder Screenshot](https://github.com/wguo91/pokemon-tcg-deck-builder/blob/master/public/images/screenshots/deckbuilder_screenshot.png)
 
 TODO:
 - create mobile view
