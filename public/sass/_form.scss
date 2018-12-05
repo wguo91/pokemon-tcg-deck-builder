@@ -1,0 +1,27 @@
+@mixin input-props {
+  @include searchBorder(2px, #093A3E);
+  padding: 0.5em;
+  margin: 0;
+  font-size: $basic-font-size;
+}
+section#form-container {
+  form#pokemon-form {
+    text-align: center;
+    display: flex;
+    label {
+      display: none;
+      padding: 0.5em 0;
+    }
+    input {
+      flex: 1 1 auto;
+    }
+    input[type="submit"] {
+      color: white;
+      background-color: $search-button-color;
+      @include input-props;
+    }
+    input[type="text"] {
+      @include input-props;
+    }
+  }
+}
