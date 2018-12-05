@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/wguo91/pokemon-tcg-deck-builder#readme",
   "dependencies": {
+    "cookie-session": "^2.0.0-beta.3",
     "express": "^4.16.4"
   }
 }
