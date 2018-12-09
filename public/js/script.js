@@ -1,16 +1,39 @@
 "use strict";
+let tempData = {};
+let tempCount = 0;
+window.addEventListener("unload", () => {
+  let savedDeck = localStorage.getItem("savedDeck");
+  if (savedDeck) {
+    // let deckStorage = JSON.parse(tempData.savedDeck);
+    localStorage.setItem("savedDeck", JSON.stringify(tempData));
+
+    // save count
+    localStorage.setItem("cardCounter", tempCount.toString());
+  }
+});
 document.addEventListener("DOMContentLoaded", () => {
   let savedDeck = localStorage.getItem("savedDeck");
   if (!savedDeck) {
-    localStorage.setItem("savedDeck", JSON.stringify({}));;
+    // first initialization of localStorage
+    localStorage.setItem("savedDeck", JSON.stringify({}));
+    localStorage.setItem("cardCounter", "0");
+    tempCount = 0;
   } else {
     let deckView = document.getElementById("deck-view");
     let jsonDeck = JSON.parse(savedDeck);
+    tempData = jsonDeck; // place into tempData for future editing purposes
     for (let cardImage in jsonDeck) {
       let doc = new DOMParser().parseFromString(jsonDeck[cardImage], "text/html");
       deckView.appendChild(doc.querySelector("figure"));
     }
+    // fetch card count from local storage
+    tempCount = localStorage.getItem("cardCounter");
   }
+  let deckCounter = document.getElementById("deck-counter");
+  deckCounter.dataset.counter = tempCount.toString();
+  deckCounter.innerHTML = tempCount.toString();
+
+  // for AJAX calls
   const USER_KEY = "a297f552f5409f003fa4edb6fe0f8419";
   let baseUrl = "https://api.pokemontcg.io/v1/";
   let baseUrlCard = "https://api.pokemontcg.io/v1/cards/";
@@ -26,9 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
       let cardImage = event.target.closest(".card-image");
       cardImage.remove();
 
-      let deckStorage = JSON.parse(localStorage.getItem("savedDeck"));
-      delete deckStorage[cardImage.id];
-      localStorage.setItem("savedDeck", JSON.stringify(deckStorage));
+      // delete from tempData to prevent from being added to localStorage on unload
+      delete tempData[cardImage.id];
     }
   });
 
@@ -159,10 +181,15 @@ document.addEventListener("DOMContentLoaded", () => {
  };
 
  /**
-  * render the specified card to the deck view as a DOM element
+  * render the specified card to the deck view as a DOM element, can only add up to
+  * 60 cards
   * @param card, the card to render into the view
   */
  function addToDeckView(card) {
+   if (document.getElementById("deck-counter").dataset.counter === 60) {
+     console.error("Deck is at maximum capacity");
+     // TODO: render error message here
+   }
    let cardImage = createCardImage(card.imageUrl, card.name);
    cardImage.classList.add("deck-view-image");
    cardImage.id = "cardImage_" + new Date().getTime().toString();
@@ -206,16 +233,17 @@ document.addEventListener("DOMContentLoaded", () => {
    let deckView = document.getElementById("deck-view");
    deckView.appendChild(cardImage);
 
-   // saving card to session
-   let deckStorage = JSON.parse(localStorage.getItem("savedDeck"));
-   deckStorage[cardImage.id] = cardImage.outerHTML;
-   localStorage.setItem("savedDeck", JSON.stringify(deckStorage));
+   // saving card to tempData, which will be transferred to local storage on unload event
+   tempData[cardImage.id] = cardImage.outerHTML;
 
-   // update counter
+   // update counter in tempData
+   tempCount++;
+   let countString = tempCount.toString();
+
+   // update counter in view
    let deckCounter = document.getElementById("deck-counter");
-   let count = parseInt(deckCounter.dataset.counter, 10) + 1;
-   deckCounter.dataset.counter = count.toString();
-   deckCounter.innerHTML = count.toString();
+   deckCounter.dataset.counter = countString;
+   deckCounter.innerHTML = countString;
  };
 
  /**
